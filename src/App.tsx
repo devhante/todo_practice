@@ -1,14 +1,30 @@
+import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import * as React from 'react';
+import LoginCard from './LoginCard';
 import MyAppBar from './MyAppBar';
 
-class App extends React.Component {
+const styles = createStyles({
+  root: {
+    display: 'flex',
+    height: 'inherit',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+});
+
+type ClassNames = WithStyles<keyof typeof styles>;
+
+class App extends React.Component<ClassNames> {
   public render() {
+    const { classes } = this.props;
     return (
-      <div className="App">
+      <div className={classes.root}>
         <MyAppBar />
+        <LoginCard />
       </div>
     );
   }
 }
 
-export default App;
+export default withStyles(styles)(App);
