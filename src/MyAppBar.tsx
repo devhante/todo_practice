@@ -4,7 +4,7 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import * as React from 'react';
-import theme from './theme';
+import { engTheme } from './theme';
 
 const styles = createStyles({
     root: {
@@ -19,7 +19,7 @@ class MyAppBar extends React.Component<ClassNames> {
         const { classes } = this.props;
         return(
             <div className={classes.root}>
-                <MuiThemeProvider theme={theme}>
+                <MuiThemeProvider theme={engTheme}>
                     <AppBar color='primary'>
                         <Toolbar>
                             <Typography variant="title" color="inherit">
