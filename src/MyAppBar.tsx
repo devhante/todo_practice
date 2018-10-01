@@ -8,7 +8,7 @@ import { engTheme } from './theme';
 
 const styles = createStyles({
     root: {
-        display: 'flex'
+
     }
 });
 
@@ -17,7 +17,7 @@ type ClassNames = WithStyles<keyof typeof styles>;
 class MyAppBar extends React.Component<ClassNames> {
     public render() {
         const { classes } = this.props;
-        return(
+        return (
             <div className={classes.root}>
                 <MuiThemeProvider theme={engTheme}>
                     <AppBar color='primary'>
