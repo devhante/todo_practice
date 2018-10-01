@@ -39,7 +39,7 @@ class LoginCard extends React.Component<ClassNames> {
                 <MuiThemeProvider theme={korTheme}>
                     <Card className={classes.card}>
                         <TextField className={classes.idTextField} label="아이디" />
-                        <TextField className={classes.pwTextField} label="비밀번호" />
+                        <TextField className={classes.pwTextField} label="비밀번호" type="password" />
                         <Button className={classes.loginButton} variant="contained" color="primary">로그인</Button>
                     </Card>
                 </MuiThemeProvider>
