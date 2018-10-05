@@ -49,6 +49,12 @@ class LoginCard extends React.Component<ClassNames> {
         this.password = event.currentTarget.value;
     }
 
+    private handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+        if(event.keyCode === 13) {
+            this.login();
+        }
+    }
+
     private login = () => {
         axios.post('https://practice.alpaca.kr/api/users/login/', {
             username: this.username,
@@ -68,9 +74,9 @@ class LoginCard extends React.Component<ClassNames> {
             <div className={classes.root}>
                 <MuiThemeProvider theme={korTheme}>
                     <Card className={classes.card}>
-                        <TextField className={classes.idTextField} label="아이디" value={this.username} onChange={this.handleChangeUsername} />
-                        <TextField className={classes.pwTextField} label="비밀번호" type="password" value={this.password} onChange={this.handleChangePassword} />
-                        <Button className={classes.loginButton} variant="contained" color="primary" onClick={this.login}>로그인</Button>
+                        <TextField className={classes.idTextField} label="아이디" value={this.username} onChange={this.handleChangeUsername} onKeyDown={this.handleKeyDown} />
+                        <TextField className={classes.pwTextField} label="비밀번호" type="password" value={this.password} onChange={this.handleChangePassword} onKeyDown={this.handleKeyDown} />
+                        <Button className={classes.loginButton} variant="contained" color="primary" onClick={this.login} >로그인</Button>
                     </Card>
                 </MuiThemeProvider>
             </div>
