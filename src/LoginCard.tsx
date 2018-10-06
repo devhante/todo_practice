@@ -1,4 +1,4 @@
-import { createStyles, withStyles } from '@material-ui/core';
+import { createStyles, WithStyles, withStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
@@ -32,8 +32,10 @@ const styles = createStyles({
     }
 });
 
+type ClassNames = WithStyles<keyof typeof styles>;
+
 @observer
-class LoginCard extends React.Component {
+class LoginCard extends React.Component<ClassNames> {
     @observable private username = '';
     @observable private password = '';
 
@@ -67,13 +69,14 @@ class LoginCard extends React.Component {
     }
 
     public render() {
+        const { classes } = this.props;
         return (
-            <div className={styles.root.toString()}>
+            <div className={classes.root}>
                 <MuiThemeProvider theme={korTheme}>
-                    <Card className={styles.card.toString()}>
-                        <TextField className={styles.idTextField.toString()} label="아이디" value={this.username} onChange={this.handleChangeUsername} onKeyDown={this.handleKeyDown} />
-                        <TextField className={styles.pwTextField.toString()} label="비밀번호" type="password" value={this.password} onChange={this.handleChangePassword} onKeyDown={this.handleKeyDown} />
-                        <Button className={styles.loginButton.toString()} variant="contained" color="primary" onClick={this.login} >로그인</Button>
+                    <Card className={classes.card}>
+                        <TextField className={classes.idTextField} label="아이디" value={this.username} onChange={this.handleChangeUsername} onKeyDown={this.handleKeyDown} />
+                        <TextField className={classes.pwTextField} label="비밀번호" type="password" value={this.password} onChange={this.handleChangePassword} onKeyDown={this.handleKeyDown} />
+                        <Button className={classes.loginButton} variant="contained" color="primary" onClick={this.login} >로그인</Button>
                     </Card>
                 </MuiThemeProvider>
             </div>
