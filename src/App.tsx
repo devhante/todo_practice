@@ -1,4 +1,4 @@
-import { createStyles, withStyles, WithStyles } from '@material-ui/core';
+import { createStyles, withStyles } from '@material-ui/core';
 import * as React from 'react';
 import LoginCard from './LoginCard';
 import MyAppBar from './MyAppBar';
@@ -13,13 +13,10 @@ const styles = createStyles({
   }
 });
 
-type ClassNames = WithStyles<keyof typeof styles>;
-
-class App extends React.Component<ClassNames> {
+class App extends React.Component {
   public render() {
-    const { classes } = this.props;
     return (
-      <div className={classes.root}>
+      <div className={styles.root.toString()}>
         <MyAppBar />
         <LoginCard />
       </div>
