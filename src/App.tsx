@@ -13,9 +13,9 @@ const styles = createStyles({
   }
 });
 
-type ClassNames = WithStyles<keyof typeof styles>;
+interface IProps extends WithStyles<typeof styles> { }
 
-class App extends React.Component<ClassNames> {
+class App extends React.Component<IProps> {
   public render() {
     const { classes } = this.props;
     return (

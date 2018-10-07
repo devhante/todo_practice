@@ -1,6 +1,6 @@
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import { createStyles, withStyles } from '@material-ui/core/styles';
+import { createStyles, withStyles, WithStyles } from '@material-ui/core/styles';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -22,21 +22,17 @@ const styles = createStyles({
     }
 });
 
-interface Props {
-    app: AppStore;
-    classes: {
-        root: string;
-        title: string;
-        buttonLogout: string;
-    }
+interface IProps extends WithStyles<typeof styles> {
+    app?: AppStore;
 }
 
 @inject('app')
 @observer
-class MyAppBar extends React.Component<Props> {
+class MyAppBar extends React.Component<IProps> {
     public render() {
-        const { app } = this.props;
+        const app = this.props.app as AppStore;
         const { classes } = this.props;
+
         return (
             <div className={classes.root}>
                 <MuiThemeProvider theme={engTheme}>

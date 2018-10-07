@@ -1,4 +1,4 @@
-import { createStyles, WithStyles, withStyles } from '@material-ui/core';
+import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
@@ -32,10 +32,10 @@ const styles = createStyles({
     }
 });
 
-type ClassNames = WithStyles<keyof typeof styles>;
+interface IProps extends WithStyles<typeof styles> { }
 
 @observer
-class LoginCard extends React.Component<ClassNames> {
+class LoginCard extends React.Component<IProps> {
     @observable private username = '';
     @observable private password = '';
 
