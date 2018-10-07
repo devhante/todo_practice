@@ -5,13 +5,15 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import TextField from '@material-ui/core/TextField';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { action, observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import * as React from 'react';
+import AppStore from './stores/app';
 import { korTheme } from './theme';
 
 const styles = createStyles({
     root: {
         display: 'flex',
+        flexDirection: "column",
         justifyContent: 'center',
         alignItems: 'center',
         height: "inherit"
@@ -32,15 +34,23 @@ const styles = createStyles({
     },
     loginButton: {
 
+    },
+    errorMessage: {
+        marginTop: "16px",
+        color: "red"
     }
 });
 
-interface IProps extends WithStyles<typeof styles> { }
+interface IProps extends WithStyles<typeof styles> {
+    app?: AppStore;
+}
 
+@inject('app')
 @observer
 class LoginCard extends React.Component<IProps> {
     @observable private username = '';
     @observable private password = '';
+    @observable private isLoginFailed = false;
 
     @action
     private handleChangeUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,6 +62,11 @@ class LoginCard extends React.Component<IProps> {
         this.password = event.currentTarget.value;
     }
 
+    @action
+    private loginFailed = () => {
+        this.isLoginFailed = true;
+    }
+
     private handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
         if(event.keyCode === 13) {
             this.login();
@@ -59,15 +74,24 @@ class LoginCard extends React.Component<IProps> {
     }
 
     private login = () => {
+        const app = this.props.app as AppStore;
         axios.post('https://practice.alpaca.kr/api/users/login/', {
             username: this.username,
             password: this.password
         })
         .then((response: AxiosResponse) => {
-            console.log(response);
+            if(response.status === 200) {
+                app.logined();
+                console.log("성공");
+            }
         })
         .catch((err: AxiosError) => {
-            console.log(err);
+            if(err.response !== undefined) {
+                if(err.response.status === 422) {
+                    this.loginFailed();
+                    console.log("실패");
+                }
+            }
         });
     }
 
@@ -81,6 +105,11 @@ class LoginCard extends React.Component<IProps> {
                         <TextField className={classes.pwTextField} label="비밀번호" type="password" value={this.password} onChange={this.handleChangePassword} onKeyDown={this.handleKeyDown} />
                         <Button className={classes.loginButton} variant="contained" color="primary" onClick={this.login} >로그인</Button>
                     </Card>
+                    {this.isLoginFailed ? (
+                        <div className={classes.errorMessage}>
+                            아이디 또는 비밀번호가 일치하지 않습니다.
+                        </div>
+                    ) : ('')}
                 </MuiThemeProvider>
             </div>
         )
