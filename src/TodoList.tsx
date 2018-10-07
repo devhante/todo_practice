@@ -9,7 +9,8 @@ const styles = createStyles({
     },
     card: {
         minWidth: '344px',
-        minHeight: '148px'
+        minHeight: '148px',
+        marginTop: "120px"
     }
 });
 

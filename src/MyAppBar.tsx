@@ -20,7 +20,8 @@ const styles = createStyles({
         flexGrow: 1
     },
     buttonAdd: {
-        marginTop: "40px",
+        position: "fixed",
+        top: "36px",
         zIndex: 1101
     },
     buttonLogout: {
