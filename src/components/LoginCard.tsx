@@ -3,12 +3,12 @@ import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
 import AppStore from '../stores/app';
-import UserStore from '../stores/user'
 import { korTheme } from '../theme';
 
 
@@ -45,10 +45,9 @@ const styles = createStyles({
 
 interface IProps extends WithStyles<typeof styles> {
     app?: AppStore;
-    user?: UserStore;
 }
 
-@inject('app', 'user')
+@inject('app')
 @observer
 class LoginCard extends React.Component<IProps> {
     @observable private username = '';
@@ -80,22 +79,20 @@ class LoginCard extends React.Component<IProps> {
         super(props);
         const app = this.props.app as AppStore;
         if(localStorage.getItem('authToken') !== null) {
-            app.logined();
+            app.login();
         }
     }
 
     private login = () => {
         const app = this.props.app as AppStore;
-        const user = this.props.user as UserStore;
         axios.post('https://practice.alpaca.kr/api/users/login/', {
             username: this.username,
             password: this.password
         })
         .then((response: AxiosResponse) => {
             if(response.status === 200) {
-                app.logined();
-                user.setUser(response.data);
-                localStorage.setItem('authToken', user.user.authToken);
+                app.login();
+                localStorage.setItem('authToken', response.data.authToken);
             }
         })
         .catch((err: AxiosError) => {
@@ -119,9 +116,9 @@ class LoginCard extends React.Component<IProps> {
                         <Button className={classes.loginButton} variant="contained" color="primary" onClick={this.login} >로그인</Button>
                     </Card>
                     {this.isLoginFailed ? (
-                        <div className={classes.errorMessage}>
+                        <Typography className={classes.errorMessage} component="p">
                             아이디 또는 비밀번호가 일치하지 않습니다.
-                        </div>
+                        </Typography>
                     ) : ('')}
                 </MuiThemeProvider>
             </div>

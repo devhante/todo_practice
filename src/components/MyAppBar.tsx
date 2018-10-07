@@ -37,10 +37,15 @@ interface IProps extends WithStyles<typeof styles> {
 @inject('app')
 @observer
 class MyAppBar extends React.Component<IProps> {
+    private handleClickButtonLogout = (event: React.MouseEvent<HTMLDivElement>) => {
+        const app = this.props.app as AppStore;
+        app.logout();
+        localStorage.removeItem('authToken');
+    }
+
     public render() {
         const app = this.props.app as AppStore;
         const { classes } = this.props;
-
         return (
             <div className={classes.root}>
                 <MuiThemeProvider theme={engTheme}>
@@ -51,7 +56,7 @@ class MyAppBar extends React.Component<IProps> {
                             </Typography>
                             {app.isLogined ? (
                                 <MuiThemeProvider theme={korTheme}>
-                                <Button className={classes.buttonLogout}>로그아웃</Button>
+                                <Button onClick={this.handleClickButtonLogout} className={classes.buttonLogout}>로그아웃</Button>
                                 </MuiThemeProvider>
                             ) : ('')}
                         </Toolbar>
