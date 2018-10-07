@@ -22,23 +22,33 @@ const styles = createStyles({
     }
 });
 
+interface Props {
+    app: AppStore;
+    classes: {
+        root: string;
+        title: string;
+        buttonLogout: string;
+    }
+}
+
 @inject('app')
 @observer
-class MyAppBar extends React.Component {
+class MyAppBar extends React.Component<Props> {
     public render() {
-        const app = this.props as AppStore;
+        const { app } = this.props;
+        const { classes } = this.props;
         return (
-            <div className={styles.root.toString()}>
+            <div className={classes.root}>
                 <MuiThemeProvider theme={engTheme}>
                     <AppBar color='primary'>
                         <Toolbar>
-                            <Typography className={styles.title.toString()} variant="title" color="inherit">
+                            <Typography className={classes.title} variant="title" color="inherit">
                                 TODO Practice
                             </Typography>
 
                             {app.isLogined ? (
                             <MuiThemeProvider theme={korTheme}>
-                                <Button className={styles.buttonLogout.toString()}>로그아웃</Button>
+                                <Button className={classes.buttonLogout}>로그아웃</Button>
                             </MuiThemeProvider>
                             ) : ('')}
                         </Toolbar>
