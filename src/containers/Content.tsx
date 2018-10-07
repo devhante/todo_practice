@@ -2,8 +2,8 @@ import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
 import LoginCard from '../components/LoginCard';
-import AppStore from '../stores/app';
 import TodoList from '../components/TodoList';
+import AppStore from '../stores/app';
 
 const styles = createStyles({
     root: {

@@ -1,7 +1,7 @@
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import * as React from 'react';
-import Content from './Content';
 import MyAppBar from '../components/MyAppBar';
+import Content from './Content';
 
 const styles = createStyles({
   root: {

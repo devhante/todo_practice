@@ -1,16 +1,16 @@
 export class UserSerializer {
-    id: number;
-    username: string;
-    authToken: string;
-    name: string;
+    public id: number;
+    public username: string;
+    public authToken: string;
+    public name: string;
 }
 
 export class TodoSerializer {
-    id: number;
-    content: string;
-    user: UserSerializer;
-    like: number;
-    createdAt: string;
-    completedAt: string;
-    isCompleted: boolean;
+    public id: number;
+    public content: string;
+    public user: UserSerializer;
+    public like: number;
+    public createdAt: string;
+    public completedAt: string;
+    public isCompleted: boolean;
 }
