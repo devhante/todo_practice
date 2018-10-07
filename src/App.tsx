@@ -7,9 +7,7 @@ const styles = createStyles({
   root: {
     display: 'flex',
     height: 'inherit',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center'
+    flexDirection: 'column'
   }
 });
 

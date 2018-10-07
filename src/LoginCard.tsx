@@ -11,7 +11,10 @@ import { korTheme } from './theme';
 
 const styles = createStyles({
     root: {
-        display: 'flex'
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: "inherit"
     },
     card: {
         minWidth: '344px',
