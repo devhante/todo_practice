@@ -76,6 +76,14 @@ class LoginCard extends React.Component<IProps> {
         }
     }
 
+    constructor(props: IProps) {
+        super(props);
+        const app = this.props.app as AppStore;
+        if(localStorage.getItem('authToken') !== null) {
+            app.logined();
+        }
+    }
+
     private login = () => {
         const app = this.props.app as AppStore;
         const user = this.props.user as UserStore;
