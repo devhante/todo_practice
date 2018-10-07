@@ -7,8 +7,8 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
-import AppStore from './stores/app';
-import { korTheme } from './theme';
+import AppStore from '../stores/app';
+import { korTheme } from '../theme';
 
 const styles = createStyles({
     root: {

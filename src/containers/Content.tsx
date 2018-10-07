@@ -1,9 +1,9 @@
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
-import LoginCard from './LoginCard';
-import AppStore from './stores/app';
-import TodoList from './TodoList';
+import LoginCard from '../components/LoginCard';
+import AppStore from '../stores/app';
+import TodoList from '../components/TodoList';
 
 const styles = createStyles({
     root: {
@@ -20,7 +20,7 @@ interface IProps extends WithStyles<typeof styles> {
 @inject('app')
 @observer
 class Content extends React.Component<IProps> {
-    public render() {
+    public render() { 
         const app = this.props.app as AppStore;
         const { classes } = this.props;
         return (

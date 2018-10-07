@@ -1,5 +1,5 @@
 import { action, observable } from "mobx"
-import { TodoSerializer } from '../Serializer';
+import { TodoSerializer } from '../serializer';
 
 export default class TodoStore {
     @observable public todo: TodoSerializer;

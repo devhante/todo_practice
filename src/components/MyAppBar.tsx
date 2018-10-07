@@ -7,8 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
-import AppStore from './stores/app'
-import { engTheme, korTheme } from './theme';
+import AppStore from '../stores/app'
+import { engTheme, korTheme } from '../theme';
 
 const styles = createStyles({
     root: {
