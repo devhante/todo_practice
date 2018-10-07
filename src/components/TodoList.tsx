@@ -1,15 +1,12 @@
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
-import Card from '@material-ui/core/Card';
 import * as React from 'react';
+import TodoCard  from './TodoCard';
 
 const styles = createStyles({
     root: {
         display: "flex",
-        justifyContent: 'center'
-    },
-    card: {
-        minWidth: '344px',
-        minHeight: '148px',
+        flexDirection: "column",
+        alignItems: 'center',
         marginTop: "120px"
     }
 });
@@ -21,9 +18,9 @@ class Content extends React.Component<IProps> {
         const { classes } = this.props;
         return (
             <div className={classes.root}>
-                <Card className={classes.card}>
-                    투두리스트입니다
-                </Card>
+                <TodoCard />
+                <TodoCard />
+                <TodoCard />
             </div>
         );
     }
