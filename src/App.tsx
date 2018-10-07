@@ -1,13 +1,11 @@
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import * as React from 'react';
-import LoginCard from './LoginCard';
+import Content from './Content';
 import MyAppBar from './MyAppBar';
 
 const styles = createStyles({
   root: {
-    display: 'flex',
     height: 'inherit',
-    flexDirection: 'column'
   }
 });
 
@@ -19,7 +17,7 @@ class App extends React.Component<IProps> {
     return (
       <div className={classes.root}>
         <MyAppBar />
-        <LoginCard />
+        <Content />
       </div>
     );
   }
