@@ -69,17 +69,17 @@ class LoginCard extends React.Component<IProps> {
         this.isLoginFailed = true;
     }
 
-    private handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-        if(event.keyCode === 13) {
-            this.login();
-        }
-    }
-
     constructor(props: IProps) {
         super(props);
         const app = this.props.app as AppStore;
         if(localStorage.getItem('authToken') !== null) {
             app.login();
+        }
+    }
+
+    private handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+        if(event.keyCode === 13) {
+            this.login();
         }
     }
 
@@ -90,18 +90,11 @@ class LoginCard extends React.Component<IProps> {
             password: this.password
         })
         .then((response: AxiosResponse) => {
-            if(response.status === 200) {
-                app.login();
-                localStorage.setItem('authToken', response.data.authToken);
-            }
+            localStorage.setItem('authToken', response.data.authToken);
+            app.login();
         })
         .catch((err: AxiosError) => {
-            if(err.response !== undefined) {
-                if(err.response.status === 422) {
-                    this.loginFailed();
-                    console.log("실패");
-                }
-            }
+            this.loginFailed();
         });
     }
 

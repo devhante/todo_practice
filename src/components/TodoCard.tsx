@@ -1,6 +1,7 @@
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import * as React from 'react';
+import { TodoSerializer } from '../serializer';
 
 const styles = createStyles({
     root: {
@@ -10,14 +11,20 @@ const styles = createStyles({
     }
 });
 
-interface IProps extends WithStyles<typeof styles> { }
+interface IProps extends WithStyles<typeof styles> {
+    data: TodoSerializer;
+}
 
 class TodoCard extends React.Component<IProps> {
+    constructor(props: IProps) {
+        super(props);
+    }
+
     public render() {
         const { classes } = this.props;
         return (
             <Card className={classes.root}>
-                투두리스트입니다
+                {this.props.data.content}
             </Card>
         );
     }
