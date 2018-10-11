@@ -10,6 +10,11 @@ export default class TodoStore {
     }
 
     @action
+    public addTodoList = (data: TodoSerializer) => {
+        this.todoList.push(data);
+    }
+
+    @action
     public setLike = (id: number, like: number) => {
         this.todoList.forEach((item) => {
             if(item.id === id) {
