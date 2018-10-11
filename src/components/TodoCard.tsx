@@ -82,6 +82,22 @@ class TodoCard extends React.Component<IProps> {
         });
     }
 
+    private delete = () => {
+        const todo = this.props.todo as TodoStore;
+        axios.delete('https://practice.alpaca.kr/api/todo/' + this.props.id + '/', {
+            headers: { 'Authorization': 'Token ' + localStorage.getItem('authToken') }
+        })
+        .then((response: AxiosResponse) => {
+            const id = response.data.id as number;
+            todo.deleteTodo(id);
+        })
+        .catch((err: AxiosError) => {
+            if(err.response !== undefined) {
+                console.log(err.response);
+            }
+        });
+    }
+
     public render() {
         const todo = this.props.todo as TodoStore;
         const { classes } = this.props;
@@ -120,7 +136,7 @@ class TodoCard extends React.Component<IProps> {
                     <Button className={classes.buttonComplete} size="medium" color="primary">
                         완료
                     </Button>
-                    <Button className={classes.buttonDelete} size="medium" color="primary">
+                    <Button className={classes.buttonDelete} size="medium" color="primary" onClick={this.delete}>
                         삭제
                     </Button>
                     <span className={classes.blank} />

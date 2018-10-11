@@ -108,7 +108,7 @@ class MyAppBar extends React.Component<IProps> {
             headers: { 'Authorization': 'Token ' + localStorage.getItem('authToken') },
         })
         .then((response: AxiosResponse) => {
-            todo.addTodoList(response.data);
+            todo.addTodo(response.data);
         })
         .catch((err: AxiosError) => {
             if(err.response !== undefined) {

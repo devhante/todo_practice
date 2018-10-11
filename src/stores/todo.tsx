@@ -10,8 +10,22 @@ export default class TodoStore {
     }
 
     @action
-    public addTodoList = (data: TodoSerializer) => {
+    public addTodo = (data: TodoSerializer) => {
         this.todoList.push(data);
+    }
+
+    @action
+    public deleteTodo = (id: number) => {
+        let index = 0;
+        this.todoList.forEach((item) => {
+            console.log(item.id);
+            console.log(id);
+            if(item.id === id) {
+                console.log(id);
+                this.todoList.splice(index, 1);
+            }
+            index += 1;
+        });
     }
 
     @action
