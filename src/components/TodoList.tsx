@@ -1,9 +1,8 @@
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { action, observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import * as React from 'react';
-import { TodoSerializer } from '../serializer';
+import TodoStore from '../stores/todo'
 import TodoCard  from './TodoCard';
 
 const styles = createStyles({
@@ -15,16 +14,13 @@ const styles = createStyles({
     }
 });
 
-interface IProps extends WithStyles<typeof styles> { }
+interface IProps extends WithStyles<typeof styles> {
+    todo?: TodoStore;
+}
 
+@inject('todo')
 @observer
 class Content extends React.Component<IProps> {
-    @observable private todoList: TodoSerializer[] = [];
-
-    @action
-    private setTodoList = (data: TodoSerializer[]) => {
-        this.todoList = data;
-    }
 
     constructor(props: IProps) {
         super(props);
@@ -32,11 +28,13 @@ class Content extends React.Component<IProps> {
     }
 
     private getTodoList = () => {
+        const todo = this.props.todo as TodoStore;
         axios.get('https://practice.alpaca.kr/api/todo/', {
             headers: { 'Authorization': 'Token ' + localStorage.getItem('authToken') }
         })
         .then((response: AxiosResponse) => {
-            this.setTodoList(response.data);
+            todo.setTodoList(response.data);
+            console.log(response.data);
         })
         .catch((err: AxiosError) => {
             if(err.response !== undefined) {
@@ -46,12 +44,13 @@ class Content extends React.Component<IProps> {
     }
 
     public render() {
+        const todo = this.props.todo as TodoStore;
         const { classes } = this.props;
         
         return (
             <div className={classes.root}>
-                {this.todoList.map((item) => (
-                    <TodoCard data={item} />
+                {todo.todoList.map((item) => (
+                    <TodoCard id={item.id} />
                 ))}
             </div>
         );

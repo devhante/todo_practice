@@ -1,9 +1,11 @@
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
 import LoginCard from '../components/LoginCard';
 import TodoList from '../components/TodoList';
 import AppStore from '../stores/app';
+import { korTheme } from '../theme';
 
 const styles = createStyles({
     root: {
@@ -25,11 +27,13 @@ class Content extends React.Component<IProps> {
         const { classes } = this.props;
         return (
             <div className={classes.root}>
-                {app.isLogined ? (
-                    <TodoList />
-                ) : (
-                    <LoginCard />
-                )}
+                <MuiThemeProvider theme={korTheme}>
+                    {app.isLogined ? (
+                        <TodoList />
+                    ) : (
+                        <LoginCard />
+                    )}
+                </MuiThemeProvider>
             </div>
         );
     }

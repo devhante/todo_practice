@@ -1,7 +1,6 @@
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import axios, { AxiosError, AxiosResponse } from 'axios';
@@ -9,8 +8,6 @@ import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
 import AppStore from '../stores/app';
-import { korTheme } from '../theme';
-
 
 const styles = createStyles({
     root: {
@@ -102,18 +99,16 @@ class LoginCard extends React.Component<IProps> {
         const { classes } = this.props;
         return (
             <div className={classes.root}>
-                <MuiThemeProvider theme={korTheme}>
-                    <Card className={classes.card}>
-                        <TextField className={classes.idTextField} label="아이디" value={this.username} onChange={this.handleChangeUsername} onKeyDown={this.handleKeyDown} />
-                        <TextField className={classes.pwTextField} label="비밀번호" type="password" value={this.password} onChange={this.handleChangePassword} onKeyDown={this.handleKeyDown} />
-                        <Button className={classes.loginButton} variant="contained" color="primary" onClick={this.login} >로그인</Button>
-                    </Card>
-                    {this.isLoginFailed ? (
-                        <Typography className={classes.errorMessage} component="p">
-                            아이디 또는 비밀번호가 일치하지 않습니다.
-                        </Typography>
-                    ) : ('')}
-                </MuiThemeProvider>
+                <Card className={classes.card}>
+                    <TextField className={classes.idTextField} label="아이디" value={this.username} onChange={this.handleChangeUsername} onKeyDown={this.handleKeyDown} />
+                    <TextField className={classes.pwTextField} label="비밀번호" type="password" value={this.password} onChange={this.handleChangePassword} onKeyDown={this.handleKeyDown} />
+                    <Button className={classes.loginButton} variant="contained" color="primary" onClick={this.login} >로그인</Button>
+                </Card>
+                {this.isLoginFailed ? (
+                    <Typography className={classes.errorMessage} component="p">
+                        아이디 또는 비밀번호가 일치하지 않습니다.
+                    </Typography>
+                ) : ('')}
             </div>
         )
     }
