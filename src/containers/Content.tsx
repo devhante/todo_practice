@@ -10,7 +10,7 @@ import { korTheme } from '../theme';
 const styles = createStyles({
     root: {
         display: 'flex',
-        height: 'inherit',
+        minHeight: 'inherit',
         flexDirection: 'column'
     }
 });

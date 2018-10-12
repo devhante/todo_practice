@@ -5,7 +5,7 @@ import Content from './Content';
 
 const styles = createStyles({
   root: {
-    height: 'inherit',
+    minHeight: 'inherit',
   }
 });
 

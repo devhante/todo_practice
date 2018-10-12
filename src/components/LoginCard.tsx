@@ -15,7 +15,7 @@ const styles = createStyles({
         flexDirection: "column",
         justifyContent: 'center',
         alignItems: 'center',
-        height: "inherit"
+        minHeight: "inherit"
     },
     card: {
         minWidth: '344px',
