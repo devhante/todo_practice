@@ -21,7 +21,7 @@ import { engTheme, korTheme } from '../theme';
 
 const styles = createStyles({
     root: {
-        display: "flex",
+        display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -29,8 +29,8 @@ const styles = createStyles({
         flexGrow: 1
     },
     buttonAdd: {
-        position: "fixed",
-        top: "36px",
+        position: 'fixed',
+        top: '36px',
         zIndex: 1101
     },
     buttonLogout: {
@@ -41,7 +41,7 @@ const styles = createStyles({
 
     },
     dialogAddTitle: {
-        width: "552px"
+        width: '552px'
     }
 });
 

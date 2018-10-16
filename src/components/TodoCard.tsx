@@ -1,10 +1,15 @@
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
 import { TodoSerializer } from '../serializer';
@@ -53,6 +58,15 @@ const styles = createStyles({
     likeRed: {
         color: '#E31B23'
     },
+    dialogWarning: {
+
+    },
+    dialogWarningTitle: {
+        width: '552px'
+    },
+    dialogWarningContent: {
+        color: 'rgba(0, 0, 0, 0.54)'
+    }
 });
 
 interface IProps extends WithStyles<typeof styles> {
@@ -63,6 +77,16 @@ interface IProps extends WithStyles<typeof styles> {
 @inject('todo')
 @observer
 class TodoCard extends React.Component<IProps> {
+    @observable private isOpenedDialogWarning = false;
+    
+    @action private openDialogWarning = () => {
+        this.isOpenedDialogWarning = true;
+    }
+
+    @action private closeDialogWarning = () => {
+        this.isOpenedDialogWarning = false;
+    }
+
     constructor(props: IProps) {
         super(props);
     }
@@ -131,6 +155,19 @@ class TodoCard extends React.Component<IProps> {
         });
     }
 
+    private handleCloseDialogWarning = () => {
+        this.closeDialogWarning();
+    }
+
+    private handleClickButtonCancel = () => {
+        this.closeDialogWarning();
+    }
+
+    private handleClickButtonSubmit = () => {
+        this.delete();
+        this.closeDialogWarning();
+    }
+
     public render() {
         const todo = this.props.todo as TodoStore;
         const { classes } = this.props;
@@ -195,7 +232,7 @@ class TodoCard extends React.Component<IProps> {
                             <Button className={classes.buttonComplete} size="medium" color="primary" onClick={this.complete}>
                                 완료
                             </Button>
-                            <Button className={classes.buttonDelete} size="medium" color="primary" onClick={this.delete}>
+                            <Button className={classes.buttonDelete} size="medium" color="primary" onClick={this.openDialogWarning}>
                                 삭제
                             </Button>
                         </React.Fragment>
@@ -207,8 +244,21 @@ class TodoCard extends React.Component<IProps> {
                     <Typography className={[classes.likeNumber, myTodo.like > 0 ? classes.likeRed : classes.likeGray].join(' ')}>
                         {myTodo.like}
                     </Typography>
-                    
                 </div>
+                <Dialog className={classes.dialogWarning} open={this.isOpenedDialogWarning} onClose={this.handleCloseDialogWarning}>
+                    <DialogTitle className={classes.dialogWarningTitle}>할 일 삭제하기</DialogTitle>
+                    <DialogContent>
+                        <Typography className={classes.dialogWarningContent}>정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.</Typography>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleClickButtonCancel} color="primary">
+                            취소
+                        </Button>
+                        <Button onClick={this.handleClickButtonSubmit} color="primary">
+                            확인
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </Card>
         );
     }
