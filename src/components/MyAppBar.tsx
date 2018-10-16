@@ -38,11 +38,11 @@ const styles = createStyles({
         color: 'white',
         fontSize: '16px'
     },
-    dialogAdd: {
-
-    },
-    dialogAddTitle: {
+    dialogTitle: {
         width: '552px'
+    },
+    dialogFailedContent: {
+        color: 'rgba(0, 0, 0, 0.54)'
     }
 });
 
@@ -57,6 +57,7 @@ interface IProps extends WithStyles<typeof styles> {
 class MyAppBar extends React.Component<IProps> {
     @observable private isOpenedDialogAdd = false;
     @observable private content = '';
+    @observable private isOpenedDialogFailed = false;
 
     @action private openDialogAdd = () => {
         this.isOpenedDialogAdd = true;
@@ -66,6 +67,15 @@ class MyAppBar extends React.Component<IProps> {
         this.isOpenedDialogAdd = false;
         this.content = '';
     }
+
+    @action private openDialogFailed = () => {
+        this.isOpenedDialogFailed = true;
+    }
+
+    @action private closeDialogFailed = () => {
+        this.isOpenedDialogFailed = false;
+    }
+
 
     @action
     private handleChangeContent = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,7 +93,11 @@ class MyAppBar extends React.Component<IProps> {
     }
     
     private handleClickButtonAdd = () => {
-        this.addTodo(this.content);
+        if(this.content.length > 100) {
+            this.openDialogFailed();
+        } else {
+            this.addTodo(this.content);
+        }
         this.closeDialogAdd();
     }
 
@@ -123,6 +137,14 @@ class MyAppBar extends React.Component<IProps> {
         });
     }
 
+    private handleCloseDialogFailed = () => {
+        this.closeDialogFailed();
+    }
+
+    private handleClickButtonSubmit = () => {
+        this.closeDialogFailed();
+    }
+
     public render() {
         const app = this.props.app as AppStore;
         const { classes } = this.props;
@@ -148,8 +170,8 @@ class MyAppBar extends React.Component<IProps> {
                     ) : ('')}
                 </MuiThemeProvider>
                 <MuiThemeProvider theme={korTheme}>
-                    <Dialog className={classes.dialogAdd} open={this.isOpenedDialogAdd} onClose={this.handleCloseDialogAdd}>
-                        <DialogTitle className={classes.dialogAddTitle}>새 할 일 추가하기</DialogTitle>
+                    <Dialog open={this.isOpenedDialogAdd} onClose={this.handleCloseDialogAdd}>
+                        <DialogTitle className={classes.dialogTitle}>새 할 일 추가하기</DialogTitle>
                         <DialogContent>
                             <TextField autoFocus={true} margin="dense" label="내용" fullWidth={true} value={this.content} onChange={this.handleChangeContent} onKeyDown={this.handleKeyDown} />
                         </DialogContent>
@@ -159,6 +181,17 @@ class MyAppBar extends React.Component<IProps> {
                             </Button>
                             <Button onClick={this.handleClickButtonAdd} color="primary">
                                 추가
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                    <Dialog open={this.isOpenedDialogFailed} onClose={this.handleCloseDialogFailed}>
+                        <DialogTitle className={classes.dialogTitle}>할 일 추가에 실패했습니다.</DialogTitle>
+                        <DialogContent>
+                            <Typography className={classes.dialogFailedContent}>할 일의 내용이 너무 깁니다. 100자 이내의 내용만 추가할 수 있습니다.</Typography>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleClickButtonSubmit} color="primary">
+                                확인
                             </Button>
                         </DialogActions>
                     </Dialog>
