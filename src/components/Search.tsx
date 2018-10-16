@@ -23,7 +23,6 @@ interface IProps extends WithStyles<typeof styles> {
 @inject('search')
 @observer
 class Search extends React.Component<IProps> {
-
     private handleChangeSearchWord = (event: React.ChangeEvent<HTMLInputElement>) => {
         const search = this.props.search as SearchStore;
         search.setSearchWord(event.currentTarget.value);

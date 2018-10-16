@@ -2,6 +2,7 @@ import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
+import LoadingStore from '../stores/loading'
 import SearchStore from '../stores/search';
 import TodoStore from '../stores/todo'
 import TodoCard  from './TodoCard';
@@ -16,32 +17,38 @@ const styles = createStyles({
 });
 
 interface IProps extends WithStyles<typeof styles> {
+    loading?: LoadingStore
     search?: SearchStore;
     todo?: TodoStore;
 }
 
-@inject('search', 'todo')
+@inject('loading', 'search', 'todo')
 @observer
-class Content extends React.Component<IProps> {
-
+class TodoList extends React.Component<IProps> {
     constructor(props: IProps) {
         super(props);
         this.getTodoList();
+        console.log('constructor 호출됨');
     }
 
     private getTodoList = () => {
+        const loading = this.props.loading as LoadingStore;
         const todo = this.props.todo as TodoStore;
+        loading.startLoading();
+        loading.endLoading();
         axios.get('https://practice.alpaca.kr/api/todo/', {
             headers: { 'Authorization': 'Token ' + localStorage.getItem('authToken') }
         })
         .then((response: AxiosResponse) => {
             todo.setTodoList(response.data);
             console.log(response.data);
+            // loading.endLoading();
         })
         .catch((err: AxiosError) => {
             if(err.response !== undefined) {
                 console.log(err.response);
             }
+            // loading.endLoading();
         });
     }
 
@@ -60,4 +67,4 @@ class Content extends React.Component<IProps> {
     }
 }
 
-export default withStyles(styles)(Content);
+export default withStyles(styles)(TodoList);

@@ -8,6 +8,7 @@ import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
 import AppStore from '../stores/app';
+import LoadingStore from '../stores/loading';
 
 const styles = createStyles({
     root: {
@@ -37,14 +38,18 @@ const styles = createStyles({
     errorMessage: {
         marginTop: "16px",
         color: "red"
+    },
+    progress: {
+        
     }
 });
 
 interface IProps extends WithStyles<typeof styles> {
     app?: AppStore;
+    loading?: LoadingStore;
 }
 
-@inject('app')
+@inject('app', 'loading')
 @observer
 class LoginCard extends React.Component<IProps> {
     @observable private username = '';
@@ -82,6 +87,8 @@ class LoginCard extends React.Component<IProps> {
 
     private login = () => {
         const app = this.props.app as AppStore;
+        const loading = this.props.loading as LoadingStore;
+        loading.startLoading();
         axios.post('https://practice.alpaca.kr/api/users/login/', {
             username: this.username,
             password: this.password
@@ -89,9 +96,11 @@ class LoginCard extends React.Component<IProps> {
         .then((response: AxiosResponse) => {
             localStorage.setItem('authToken', response.data.authToken);
             app.login();
+            loading.endLoading();
         })
         .catch((err: AxiosError) => {
             this.loginFailed();
+            loading.endLoading();
         });
     }
 

@@ -15,6 +15,7 @@ import { action, observable } from "mobx"
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
 import AppStore from '../stores/app';
+import LoadingStore from '../stores/loading';
 import TodoStore from'../stores/todo';
 import { engTheme, korTheme } from '../theme';
 
@@ -47,10 +48,11 @@ const styles = createStyles({
 
 interface IProps extends WithStyles<typeof styles> {
     app?: AppStore;
+    loading?: LoadingStore;
     todo?: TodoStore;
 }
 
-@inject('app', 'todo')
+@inject('app', 'loading', 'todo')
 @observer
 class MyAppBar extends React.Component<IProps> {
     @observable private isOpenedDialogAdd = false;
@@ -101,7 +103,9 @@ class MyAppBar extends React.Component<IProps> {
     }
 
     private addTodo = (content: string) => {
+        const loading = this.props.loading as LoadingStore;
         const todo = this.props.todo as TodoStore;
+        loading.startLoading();
         axios.post('https://practice.alpaca.kr/api/todo/', {
             content: this.content
         }, {
@@ -109,11 +113,13 @@ class MyAppBar extends React.Component<IProps> {
         })
         .then((response: AxiosResponse) => {
             todo.addTodo(response.data);
+            loading.endLoading();
         })
         .catch((err: AxiosError) => {
             if(err.response !== undefined) {
                 console.log(err.response);
             }
+            loading.endLoading();
         });
     }
 

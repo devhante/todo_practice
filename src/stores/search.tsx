@@ -1,10 +1,10 @@
 import { action, observable } from "mobx";
 
 export default class SearchStore {
-    @observable public searchWord = '';
+  @observable public searchWord = '';
 
-    @action
-    public setSearchWord = (value: string) => {
-      this.searchWord = value;
-    }
+  @action
+  public setSearchWord = (value: string) => {
+    this.searchWord = value;
   }
+}
