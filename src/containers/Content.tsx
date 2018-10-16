@@ -3,10 +3,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
-import CompletedRatio from '../components/CompletedRatio';
 import LoadingSwitch from '../components/LoadingSwitch';
 import LoginCard from '../components/LoginCard';
-import Search from '../components/Search';
 import TodoList from '../components/TodoList';
 import AppStore from '../stores/app';
 import LoadingStore from '../stores/loading';
@@ -46,11 +44,7 @@ class Content extends React.Component<IProps> {
             <div className={classes.root}>
                 <MuiThemeProvider theme={korTheme}>
                     {app.isLogined ? (
-                        <React.Fragment>
-                            <Search />
-                            <CompletedRatio />
-                            <TodoList />
-                        </React.Fragment>
+                        <TodoList />
                     ) : (
                         <LoginCard />
                     )}

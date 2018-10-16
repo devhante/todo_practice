@@ -12,7 +12,7 @@ const styles = createStyles({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        marginTop: '64px'
+        marginTop: '140px'
     }
 });
 
