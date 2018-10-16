@@ -15,6 +15,34 @@ export default class TodoStore {
     }
 
     @action
+    public setLike = (id: number, like: number) => {
+        this.todoList.forEach((item) => {
+            if(item.id === id) {
+                item.like = like;
+            }
+        });
+    }
+
+    @action
+    public revertTodo = (id: number) => {
+        this.todoList.forEach((item) => {
+            if(item.id === id) {
+                item.isCompleted = false;
+            }
+        })
+    }
+
+    @action
+    public completeTodo = (id: number, completedAt: string) => {
+        this.todoList.forEach((item) => {
+            if(item.id === id) {
+                item.isCompleted = true;
+                item.completedAt = completedAt;
+            }
+        })
+    }
+
+    @action
     public deleteTodo = (id: number) => {
         let index = 0;
         this.todoList.forEach((item) => {
@@ -28,12 +56,5 @@ export default class TodoStore {
         });
     }
 
-    @action
-    public setLike = (id: number, like: number) => {
-        this.todoList.forEach((item) => {
-            if(item.id === id) {
-                item.like = like;
-            }
-        });
-    }
+    
 }

@@ -28,11 +28,12 @@ const styles = createStyles({
     name: {
         
     },
-    createdAt: {
-        marginBottom: '12px',
-    },
     bottom: {
-        display: 'flex'
+        display: 'flex',
+        marginTop: '12px'
+    },
+    buttonRevert: {
+
     },
     buttonComplete: {
         marginRight: '4px'
@@ -82,6 +83,38 @@ class TodoCard extends React.Component<IProps> {
         });
     }
 
+    private revert = () => {
+        const todo = this.props.todo as TodoStore;
+        axios.post('https://practice.alpaca.kr/api/todo/' + this.props.id + '/revert_complete/', '', {
+            headers: { 'Authorization': 'Token ' + localStorage.getItem('authToken') }
+        })
+        .then((response: AxiosResponse) => {
+            const id = response.data.id as number;
+            todo.revertTodo(id);
+        })
+        .catch((err: AxiosError) => {
+            if(err.response !== undefined) {
+                console.log(err.response);
+            }
+        });
+    }
+
+    private complete = () => {
+        const todo = this.props.todo as TodoStore;
+        axios.post('https://practice.alpaca.kr/api/todo/' + this.props.id + '/complete/', '', {
+            headers: { 'Authorization': 'Token ' + localStorage.getItem('authToken') }
+        })
+        .then((response: AxiosResponse) => {
+            const data = response.data as TodoSerializer;
+            todo.completeTodo(data.id, data.completedAt);
+        })
+        .catch((err: AxiosError) => {
+            if(err.response !== undefined) {
+                console.log(err.response);
+            }
+        });
+    }
+
     private delete = () => {
         const todo = this.props.todo as TodoStore;
         axios.delete('https://practice.alpaca.kr/api/todo/' + this.props.id + '/', {
@@ -109,16 +142,31 @@ class TodoCard extends React.Component<IProps> {
            }
         });
 
-        const year = Number(myTodo.createdAt.substring(0, 4));
-        const month = Number(myTodo.createdAt.substring(5, 7));
-        const date = Number(myTodo.createdAt.substring(8, 10));
-        const ampm = Number(myTodo.createdAt.substring(11, 13)) < 12 ? '오전' : '오후';
-        let hour = Number(myTodo.createdAt.substring(11, 13));
-        const minute = Number(myTodo.createdAt.substring(14, 16));
-        const second = Number(myTodo.createdAt.substring(17, 19));
+        const createdYear = Number(myTodo.createdAt.substring(0, 4));
+        const createdMonth = Number(myTodo.createdAt.substring(5, 7));
+        const createdDate = Number(myTodo.createdAt.substring(8, 10));
+        const createdAmpm = Number(myTodo.createdAt.substring(11, 13)) < 12 ? '오전' : '오후';
+        let createdHour = Number(myTodo.createdAt.substring(11, 13));
+        const createdMinute = Number(myTodo.createdAt.substring(14, 16));
+        const createdSecond = Number(myTodo.createdAt.substring(17, 19));
 
-        if(hour > 12) {
-            hour -= 12;
+        
+        const completedYear = myTodo.isCompleted ? Number(myTodo.completedAt.substring(0, 4)) : null;
+        const completedMonth = myTodo.isCompleted ? Number(myTodo.completedAt.substring(5, 7)) : null;
+        const completedDate = myTodo.isCompleted ? Number(myTodo.completedAt.substring(8, 10)) : null;
+        const completedAmpm = myTodo.isCompleted ? Number(myTodo.completedAt.substring(11, 13)) < 12 ? '오전' : '오후' : null;
+        let completedHour = myTodo.isCompleted ? Number(myTodo.completedAt.substring(11, 13)) : null;
+        const completedMinute = myTodo.isCompleted ? Number(myTodo.completedAt.substring(14, 16)) : null;
+        const completedSecond = myTodo.isCompleted ? Number(myTodo.completedAt.substring(17, 19)) : null;
+
+        if(createdHour > 12) {
+            createdHour -= 12;
+        }
+
+        if(completedHour != null) {
+            if(completedHour > 12) {
+                completedHour -= 12;
+            }
         }
 
         return (
@@ -129,16 +177,29 @@ class TodoCard extends React.Component<IProps> {
                 <Typography className={[classes.middle, classes.name].join(' ')}>
                     {myTodo.user.name}
                 </Typography>
-                <Typography className={[classes.middle, classes.createdAt].join(' ')}>
-                    {year}년 {month}월 {date}일 {ampm} {hour}시 {minute}분 {second}초에 생성됨
+                <Typography className={classes.middle}>
+                    {createdYear}년 {createdMonth}월 {createdDate}일 {createdAmpm} {createdHour}시 {createdMinute}분 {createdSecond}초에 생성됨
                 </Typography>
+                {myTodo.isCompleted ? (
+                    <Typography className={classes.middle}>
+                        {completedYear}년 {completedMonth}월 {completedDate}일 {completedAmpm} {completedHour}시 {completedMinute}분 {completedSecond}초에 생성됨
+                    </Typography>
+                ) : ('')}
                 <div className={classes.bottom}>
-                    <Button className={classes.buttonComplete} size="medium" color="primary">
-                        완료
-                    </Button>
-                    <Button className={classes.buttonDelete} size="medium" color="primary" onClick={this.delete}>
-                        삭제
-                    </Button>
+                    {myTodo.isCompleted ? (
+                        <Button className={classes.buttonRevert} size="medium" color="primary" onClick={this.revert}>
+                            되돌리기
+                        </Button>
+                    ) : (
+                        <React.Fragment>
+                            <Button className={classes.buttonComplete} size="medium" color="primary" onClick={this.complete}>
+                                완료
+                            </Button>
+                            <Button className={classes.buttonDelete} size="medium" color="primary" onClick={this.delete}>
+                                삭제
+                            </Button>
+                        </React.Fragment>
+                    )}
                     <span className={classes.blank} />
                     <IconButton className={myTodo.like > 0 ? classes.likeRed : classes.likeGray} onClick={this.addLike}>
                         <FavoriteIcon fontSize="small"/>
