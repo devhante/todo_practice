@@ -10,9 +10,6 @@ const styles = createStyles({
         flexDirection: 'column',
         alignItems: 'center',
         marginTop: '12px'
-    },
-    text: {
-
     }
 });
 
@@ -38,7 +35,7 @@ class CompletedRatio extends React.Component<IProps> {
 
         return (
             <div className={classes.root}>
-                <Typography className={classes.text}>
+                <Typography>
                     {count === 0 ? 0 : Math.ceil(completedCount / count * 10000) / 100}% 완료되었습니다. ({count}개 중 {completedCount}개 완료)
                 </Typography>
             </div>

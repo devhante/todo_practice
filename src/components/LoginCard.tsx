@@ -32,15 +32,9 @@ const styles = createStyles({
     pwTextField: {
         marginBottom: '24px'
     },
-    loginButton: {
-
-    },
     errorMessage: {
         marginTop: "16px",
         color: "red"
-    },
-    progress: {
-        
     }
 });
 
@@ -111,7 +105,7 @@ class LoginCard extends React.Component<IProps> {
                 <Card className={classes.card}>
                     <TextField className={classes.idTextField} label="아이디" value={this.username} onChange={this.handleChangeUsername} onKeyDown={this.handleKeyDown} />
                     <TextField className={classes.pwTextField} label="비밀번호" type="password" value={this.password} onChange={this.handleChangePassword} onKeyDown={this.handleKeyDown} />
-                    <Button className={classes.loginButton} variant="contained" color="primary" onClick={this.login} >로그인</Button>
+                    <Button variant="contained" color="primary" onClick={this.login} >로그인</Button>
                 </Card>
                 {this.isLoginFailed ? (
                     <Typography className={classes.errorMessage} component="p">

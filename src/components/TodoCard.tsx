@@ -31,21 +31,12 @@ const styles = createStyles({
         marginLeft: '16px',
         color: 'rgba(0, 0, 0, 0.39)' 
     },
-    name: {
-        
-    },
     bottom: {
         display: 'flex',
         marginTop: '12px'
     },
-    buttonRevert: {
-
-    },
     buttonComplete: {
         marginRight: '4px'
-    },
-    buttonDelete: {
-
     },
     blank: {
         flexGrow: 1
@@ -58,9 +49,6 @@ const styles = createStyles({
     },
     likeRed: {
         color: '#E31B23'
-    },
-    dialogWarning: {
-
     },
     dialogWarningTitle: {
         width: '552px'
@@ -229,7 +217,7 @@ class TodoCard extends React.Component<IProps> {
                 <Typography className={classes.content}>
                     {myTodo.content}
                 </Typography>
-                <Typography className={[classes.middle, classes.name].join(' ')}>
+                <Typography className={classes.middle}>
                     {myTodo.user.name}
                 </Typography>
                 <Typography className={classes.middle}>
@@ -242,7 +230,7 @@ class TodoCard extends React.Component<IProps> {
                 ) : ('')}
                 <div className={classes.bottom}>
                     {myTodo.isCompleted ? (
-                        <Button className={classes.buttonRevert} size="medium" color="primary" onClick={this.revert}>
+                        <Button size="medium" color="primary" onClick={this.revert}>
                             되돌리기
                         </Button>
                     ) : (
@@ -250,7 +238,7 @@ class TodoCard extends React.Component<IProps> {
                             <Button className={classes.buttonComplete} size="medium" color="primary" onClick={this.complete}>
                                 완료
                             </Button>
-                            <Button className={classes.buttonDelete} size="medium" color="primary" onClick={this.openDialogWarning}>
+                            <Button size="medium" color="primary" onClick={this.openDialogWarning}>
                                 삭제
                             </Button>
                         </React.Fragment>
@@ -263,7 +251,7 @@ class TodoCard extends React.Component<IProps> {
                         {myTodo.like}
                     </Typography>
                 </div>
-                <Dialog className={classes.dialogWarning} open={this.isOpenedDialogWarning} onClose={this.handleCloseDialogWarning}>
+                <Dialog open={this.isOpenedDialogWarning} onClose={this.handleCloseDialogWarning}>
                     <DialogTitle className={classes.dialogWarningTitle}>할 일 삭제하기</DialogTitle>
                     <DialogContent>
                         <Typography className={classes.dialogWarningContent}>정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.</Typography>
