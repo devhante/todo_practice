@@ -2,23 +2,25 @@ import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
+import SearchStore from '../stores/search';
 import TodoStore from '../stores/todo'
 import TodoCard  from './TodoCard';
 
 const styles = createStyles({
     root: {
-        display: "flex",
-        flexDirection: "column",
+        display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
-        marginTop: "120px"
+        marginTop: '64px'
     }
 });
 
 interface IProps extends WithStyles<typeof styles> {
+    search?: SearchStore;
     todo?: TodoStore;
 }
 
-@inject('todo')
+@inject('search', 'todo')
 @observer
 class Content extends React.Component<IProps> {
 
@@ -44,13 +46,14 @@ class Content extends React.Component<IProps> {
     }
 
     public render() {
+        const search = this.props.search as SearchStore;
         const todo = this.props.todo as TodoStore;
         const { classes } = this.props;
         
         return (
             <div className={classes.root}>
                 {todo.todoList.map((item) => (
-                    <TodoCard id={item.id} />
+                    search.searchWord.trim() !== '' ? (item.content.includes(search.searchWord.trim()) ? <TodoCard id={item.id} /> : '') : <TodoCard id={item.id} />
                 ))}
             </div>
         );

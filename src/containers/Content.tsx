@@ -3,6 +3,7 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
 import LoginCard from '../components/LoginCard';
+import Search from '../components/Search';
 import TodoList from '../components/TodoList';
 import AppStore from '../stores/app';
 import { korTheme } from '../theme';
@@ -29,7 +30,10 @@ class Content extends React.Component<IProps> {
             <div className={classes.root}>
                 <MuiThemeProvider theme={korTheme}>
                     {app.isLogined ? (
-                        <TodoList />
+                        <React.Fragment>
+                            <Search />
+                            <TodoList />
+                        </React.Fragment>
                     ) : (
                         <LoginCard />
                     )}
