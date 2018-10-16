@@ -225,7 +225,7 @@ class TodoCard extends React.Component<IProps> {
                 </Typography>
                 {myTodo.isCompleted ? (
                     <Typography className={classes.middle}>
-                        {completedYear}년 {completedMonth}월 {completedDate}일 {completedAmpm} {completedHour}시 {completedMinute}분 {completedSecond}초에 생성됨
+                        {completedYear}년 {completedMonth}월 {completedDate}일 {completedAmpm} {completedHour}시 {completedMinute}분 {completedSecond}초에 완료됨
                     </Typography>
                 ) : ('')}
                 <div className={classes.bottom}>
