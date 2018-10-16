@@ -12,7 +12,7 @@ import TodoStore from '../stores/todo'
 
 const styles = createStyles({
     root: {
-        minWidth: '344px',
+        width: '344px',
         marginBottom: "36px",
         padding: '16px 24px 8px 8px'
     },
