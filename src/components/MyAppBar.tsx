@@ -39,7 +39,7 @@ const styles = createStyles({
     },
     ratio: {
         color: 'white',
-        marginRight: '20px'
+        marginRight: '28px'
     },
     search: {
         padding: '2px 12px',
