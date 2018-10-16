@@ -32,7 +32,6 @@ class Search extends React.Component<IProps> {
     public render() {
         const search = this.props.search as SearchStore;
         const { classes } = this.props;
-
         return (
             <div className={classes.root}>
                 <TextField className={classes.textField} label="검색" value={search.searchWord} onChange={this.handleChangeSearchWord} />

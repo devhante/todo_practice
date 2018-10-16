@@ -2,6 +2,7 @@ import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
+import CompletedRatio from '../components/CompletedRatio';
 import LoginCard from '../components/LoginCard';
 import Search from '../components/Search';
 import TodoList from '../components/TodoList';
@@ -32,6 +33,7 @@ class Content extends React.Component<IProps> {
                     {app.isLogined ? (
                         <React.Fragment>
                             <Search />
+                            <CompletedRatio />
                             <TodoList />
                         </React.Fragment>
                     ) : (
