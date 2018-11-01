@@ -2,9 +2,7 @@ import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
-import LoadingStore from '../stores/loading'
-import SearchStore from '../stores/search';
-import TodoStore from '../stores/todo'
+import RootStore from '../stores/root';
 import TodoCard  from './TodoCard';
 
 const styles = createStyles({
@@ -17,12 +15,10 @@ const styles = createStyles({
 });
 
 interface IProps extends WithStyles<typeof styles> {
-    loading?: LoadingStore
-    search?: SearchStore;
-    todo?: TodoStore;
+    root?: RootStore;
 }
 
-@inject('loading', 'search', 'todo')
+@inject('root')
 @observer
 class TodoList extends React.Component<IProps> {
     constructor(props: IProps) {
@@ -32,15 +28,14 @@ class TodoList extends React.Component<IProps> {
     }
 
     private getTodoList = () => {
-        const loading = this.props.loading as LoadingStore;
-        const todo = this.props.todo as TodoStore;
-        loading.startLoading();
-        loading.endLoading();
+        const root = this.props.root as RootStore;
+        root.loadingStore.startLoading();
+        root.loadingStore.endLoading();
         axios.get('https://practice.alpaca.kr/api/todo/', {
             headers: { 'Authorization': 'Token ' + localStorage.getItem('authToken') }
         })
         .then((response: AxiosResponse) => {
-            todo.setTodoList(response.data);
+            root.todoStore.setTodoList(response.data);
             console.log(response.data);
             // loading.endLoading();
         })
@@ -53,14 +48,13 @@ class TodoList extends React.Component<IProps> {
     }
 
     public render() {
-        const search = this.props.search as SearchStore;
-        const todo = this.props.todo as TodoStore;
+        const root = this.props.root as RootStore;
         const { classes } = this.props;
         
         return (
             <div className={classes.root}>
-                {todo.todoList.map((item) => (
-                    search.searchWord.trim() !== '' ? (item.content.includes(search.searchWord.trim()) ? <TodoCard id={item.id} /> : '') : <TodoCard id={item.id} />
+                {root.todoStore.todoList.map((item) => (
+                    root.searchStore.searchWord.trim() !== '' ? (item.content.includes(root.searchStore.searchWord.trim()) ? <TodoCard id={item.id} /> : '') : <TodoCard id={item.id} />
                 ))}
             </div>
         );

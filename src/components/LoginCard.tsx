@@ -7,8 +7,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
-import AppStore from '../stores/app';
-import LoadingStore from '../stores/loading';
+import RootStore from '../stores/root';
 
 const styles = createStyles({
     root: {
@@ -45,11 +44,10 @@ const styles = createStyles({
 });
 
 interface IProps extends WithStyles<typeof styles> {
-    app?: AppStore;
-    loading?: LoadingStore;
+    root?: RootStore;
 }
 
-@inject('app', 'loading')
+@inject('root')
 @observer
 class LoginCard extends React.Component<IProps> {
     @observable private username = '';
@@ -73,9 +71,9 @@ class LoginCard extends React.Component<IProps> {
 
     constructor(props: IProps) {
         super(props);
-        const app = this.props.app as AppStore;
+        const root = this.props.root as RootStore;
         if(localStorage.getItem('authToken') !== null) {
-            app.login();
+            root.appStore.login();
         }
     }
 
@@ -85,21 +83,20 @@ class LoginCard extends React.Component<IProps> {
     }
 
     private login = () => {
-        const app = this.props.app as AppStore;
-        const loading = this.props.loading as LoadingStore;
-        loading.startLoading();
+        const root = this.props.root as RootStore;
+        root.loadingStore.startLoading();
         axios.post('https://practice.alpaca.kr/api/users/login/', {
             username: this.username,
             password: this.password
         })
         .then((response: AxiosResponse) => {
             localStorage.setItem('authToken', response.data.authToken);
-            app.login();
-            loading.endLoading();
+            root.appStore.login();
+            root.loadingStore.endLoading();
         })
         .catch((err: AxiosError) => {
             this.loginFailed();
-            loading.endLoading();
+            root.loadingStore.endLoading();
         });
     }
 

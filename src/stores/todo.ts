@@ -1,22 +1,28 @@
 import { action, observable } from "mobx"
 import { TodoSerializer } from '../serializer';
+import RootStore from "./root";
 
 export default class TodoStore {
     @observable public todoList: TodoSerializer[] = [];
+    private rootStore: RootStore;
+
+    constructor(rootStore: RootStore) {
+        this.rootStore = rootStore;
+    }
 
     @action
     public setTodoList = (data: TodoSerializer[]) => {
-        this.todoList = data;
+        this.rootStore.todoStore.todoList = data;
     }
 
     @action
     public addTodo = (data: TodoSerializer) => {
-        this.todoList.push(data);
+        this.rootStore.todoStore.todoList.push(data);
     }
 
     @action
     public setLike = (id: number, like: number) => {
-        this.todoList.forEach((item) => {
+        this.rootStore.todoStore.todoList.forEach((item) => {
             if(item.id === id) {
                 item.like = like;
             }
@@ -25,7 +31,7 @@ export default class TodoStore {
 
     @action
     public revertTodo = (id: number) => {
-        this.todoList.forEach((item) => {
+        this.rootStore.todoStore.todoList.forEach((item) => {
             if(item.id === id) {
                 item.isCompleted = false;
             }
@@ -34,7 +40,7 @@ export default class TodoStore {
 
     @action
     public completeTodo = (id: number, completedAt: string) => {
-        this.todoList.forEach((item) => {
+        this.rootStore.todoStore.todoList.forEach((item) => {
             if(item.id === id) {
                 item.isCompleted = true;
                 item.completedAt = completedAt;
@@ -45,12 +51,12 @@ export default class TodoStore {
     @action
     public deleteTodo = (id: number) => {
         let index = 0;
-        this.todoList.forEach((item) => {
+        this.rootStore.todoStore.todoList.forEach((item) => {
             console.log(item.id);
             console.log(id);
             if(item.id === id) {
                 console.log(id);
-                this.todoList.splice(index, 1);
+                this.rootStore.todoStore.todoList.splice(index, 1);
             }
             index += 1;
         });

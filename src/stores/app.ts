@@ -1,15 +1,21 @@
 import { action, observable } from "mobx";
+import RootStore from "./root";
 
 export default class AppStore {
   @observable public isLogined = false;
+  private rootStore: RootStore;
+
+  constructor(rootStore: RootStore) {
+    this.rootStore = rootStore;
+  }
 
   @action
   public login = () => {
-    this.isLogined = true;
+    this.rootStore.appStore.isLogined = true;
   }
 
   @action
   public logout = () => {
-    this.isLogined = false;
+    this.rootStore.appStore.isLogined = false;
   }
 }

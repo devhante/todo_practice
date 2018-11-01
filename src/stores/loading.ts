@@ -1,28 +1,35 @@
 import { action, observable } from "mobx";
+import RootStore from "./root";
 
 export default class LoadingStore {
     @observable public loadingSwitch = true;
     @observable public isLoading = false;
+    private rootStore: RootStore;
+
+    constructor(rootStore: RootStore) {
+        this.rootStore = rootStore;
+    }
+
 
     @action
     public allowLoading = () => {
-        this.loadingSwitch = true;
+        this.rootStore.loadingStore.loadingSwitch = true;
     }
 
     @action
     public disallowLoading = () => {
-        this.loadingSwitch = false;
+        this.rootStore.loadingStore.loadingSwitch = false;
     }
 
     @action
     public startLoading = () => {
-        if(this.loadingSwitch) {
-            this.isLoading = true;
+        if(this.rootStore.loadingStore.loadingSwitch) {
+            this.rootStore.loadingStore.isLoading = true;
         }    
     }
 
     @action
     public endLoading = () => {
-        this.isLoading = false;
+        this.rootStore.loadingStore.isLoading = false;
     }
 }

@@ -6,8 +6,7 @@ import * as React from 'react';
 import LoadingSwitch from '../components/LoadingSwitch';
 import LoginCard from '../components/LoginCard';
 import TodoList from '../components/TodoList';
-import AppStore from '../stores/app';
-import LoadingStore from '../stores/loading';
+import RootStore from '../stores/root';
 import { korTheme } from '../theme';
 
 
@@ -29,27 +28,25 @@ const styles = createStyles({
 });
 
 interface IProps extends WithStyles<typeof styles> {
-    app?: AppStore;
-    loading?: LoadingStore;
+    root?: RootStore;
 }
 
-@inject('app', 'loading')
+@inject('root')
 @observer
 class Content extends React.Component<IProps> {
     public render() { 
-        const app = this.props.app as AppStore;
-        const loading = this.props.loading as LoadingStore;
+        const root = this.props.root as RootStore;
         const { classes } = this.props;
         return (
             <div className={classes.root}>
                 <MuiThemeProvider theme={korTheme}>
-                    {app.isLogined ? (
+                    {root.appStore.isLogined ? (
                         <TodoList />
                     ) : (
                         <LoginCard />
                     )}
                     <LoadingSwitch />
-                    {loading.isLoading ? (
+                    {root.loadingStore.isLoading ? (
                         <div className={classes.progress}>
                             <CircularProgress />
                         </div>

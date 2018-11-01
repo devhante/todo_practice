@@ -15,11 +15,9 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { action, observable } from "mobx"
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
-import AppStore from '../stores/app';
-import LoadingStore from '../stores/loading';
-import SearchStore from '../stores/search';
-import TodoStore from'../stores/todo';
+import RootStore from '../stores/root';
 import { engTheme, korTheme } from '../theme';
+
 
 
 
@@ -61,13 +59,10 @@ const styles = createStyles({
 });
 
 interface IProps extends WithStyles<typeof styles> {
-    app?: AppStore;
-    loading?: LoadingStore;
-    search?: SearchStore;
-    todo?: TodoStore;
+    root?: RootStore
 }
 
-@inject('app', 'loading', 'search', 'todo')
+@inject('root')
 @observer
 class MyAppBar extends React.Component<IProps> {
     @observable private isOpenedDialogAdd = false;
@@ -98,13 +93,13 @@ class MyAppBar extends React.Component<IProps> {
     }
 
     private handleChangeSearchWord = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const search = this.props.search as SearchStore;
-        search.setSearchWord(event.currentTarget.value);
+        const root = this.props.root as RootStore;
+        root.searchStore.setSearchWord(event.currentTarget.value);
     }
 
     private handleClickButtonLogout = (event: React.MouseEvent<HTMLDivElement>) => {
-        const app = this.props.app as AppStore;
-        app.logout();
+        const root = this.props.root as RootStore;
+        root.appStore.logout();
         localStorage.removeItem('authToken');
     }
 
@@ -131,23 +126,22 @@ class MyAppBar extends React.Component<IProps> {
     }
 
     private addTodo = (content: string) => {
-        const loading = this.props.loading as LoadingStore;
-        const todo = this.props.todo as TodoStore;
-        loading.startLoading();
+        const root = this.props.root as RootStore;
+        root.loadingStore.startLoading();
         axios.post('https://practice.alpaca.kr/api/todo/', {
             content: this.content
         }, {
             headers: { 'Authorization': 'Token ' + localStorage.getItem('authToken') },
         })
         .then((response: AxiosResponse) => {
-            todo.addTodo(response.data);
-            loading.endLoading();
+            root.todoStore.addTodo(response.data);
+            root.loadingStore.endLoading();
         })
         .catch((err: AxiosError) => {
             if(err.response !== undefined) {
                 console.log(err.response);
             }
-            loading.endLoading();
+            root.loadingStore.endLoading();
         });
     }
 
@@ -164,13 +158,11 @@ class MyAppBar extends React.Component<IProps> {
     };
 
     public render() {
-        const app = this.props.app as AppStore;
-        const search = this.props.search as SearchStore;
-        const todo = this.props.todo as TodoStore;
+        const root = this.props.root as RootStore;
         const { classes } = this.props;
-        const count = todo.todoList.length;
+        const count = root.todoStore.todoList.length;
         let completedCount = 0
-        todo.todoList.forEach((item) => {
+        root.todoStore.todoList.forEach((item) => {
             if(item.isCompleted) {
                 completedCount++;
             }
@@ -183,18 +175,18 @@ class MyAppBar extends React.Component<IProps> {
                             <Typography className={classes.title} variant="title" color="inherit">
                                 TODO Practice
                             </Typography>
-                            {app.isLogined ? (
+                            {root.appStore.isLogined ? (
                                 <MuiThemeProvider theme={korTheme}>
                                     <Typography className={classes.ratio}>
                                         {count === 0 ? 0 : Math.ceil(completedCount / count * 10000) / 100}% 완료되었습니다. ({count}개 중 {completedCount}개 완료)
                                     </Typography>
-                                    <InputBase className={classes.search} placeholder="검색" value={search.searchWord} onChange={this.handleChangeSearchWord} />
+                                    <InputBase className={classes.search} placeholder="검색" value={root.searchStore.searchWord} onChange={this.handleChangeSearchWord} />
                                     <Button className={classes.buttonLogout} onClick={this.handleClickButtonLogout}>로그아웃</Button>
                                 </MuiThemeProvider>
                             ) : ('')}
                         </Toolbar>
                     </AppBar>
-                    {app.isLogined ? (
+                    {root.appStore.isLogined ? (
                         <Button className={classes.buttonAdd} variant="fab" color="secondary" aria-label="add" onClick={this.handleClickFabButtonAdd}>
                             <AddIcon />
                         </Button>

@@ -4,20 +4,12 @@ import * as ReactDOM from 'react-dom';
 import App from './containers/App';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
-import AppStore from './stores/app';
-import LoadingStore from './stores/loading';
-import SearchStore from './stores/search';
-import TodoStore from './stores/todo';
-import UserStore from './stores/user';
+import RootStore from './stores/root'
 
-const app = new AppStore();
-const loading = new LoadingStore();
-const search = new SearchStore();
-const todo = new TodoStore();
-const user = new UserStore();
+const root = new RootStore();
 
 ReactDOM.render(
-  <Provider app={app} loading={loading} search={search} todo={todo} user={user}>
+  <Provider root={root}>
     <App />
   </Provider>,
   document.getElementById('root') as HTMLElement

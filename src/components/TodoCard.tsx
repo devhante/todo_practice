@@ -13,8 +13,7 @@ import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
 import { TodoSerializer } from '../serializer';
-import LoadingStore from '../stores/loading';
-import TodoStore from '../stores/todo'
+import RootStore from '../stores/root';
 
 const styles = createStyles({
     root: {
@@ -60,11 +59,10 @@ const styles = createStyles({
 
 interface IProps extends WithStyles<typeof styles> {
     id: number;
-    loading?: LoadingStore;
-    todo?: TodoStore;
+    root?: RootStore;
 }
 
-@inject('loading', 'todo')
+@inject('root')
 @observer
 class TodoCard extends React.Component<IProps> {
     @observable private isOpenedDialogWarning = false;
@@ -82,82 +80,78 @@ class TodoCard extends React.Component<IProps> {
     }
 
     private addLike = () => {
-        const loading = this.props.loading as LoadingStore;
-        const todo = this.props.todo as TodoStore;
-        loading.startLoading();
+        const root = this.props.root as RootStore;
+        root.loadingStore.startLoading();
         axios.post('https://practice.alpaca.kr/api/todo/' + this.props.id + '/add_like/','', {
             headers: { 'Authorization': 'Token ' + localStorage.getItem('authToken') }
         })
         .then((response: AxiosResponse) => {
             const data = response.data as TodoSerializer;
-            todo.setLike(data.id, data.like);
-            loading.endLoading();
+            root.todoStore.setLike(data.id, data.like);
+            root.loadingStore.endLoading();
         })
         .catch((err: AxiosError) => {
             if(err.response !== undefined) {
                 console.log(err.response);
             }
-            loading.endLoading();
+            root.loadingStore.endLoading();
         });
     }
 
     private revert = () => {
-        const loading = this.props.loading as LoadingStore;
-        const todo = this.props.todo as TodoStore;
-        loading.startLoading();
+        const root = this.props.root as RootStore;
+        root.loadingStore.startLoading();
         axios.post('https://practice.alpaca.kr/api/todo/' + this.props.id + '/revert_complete/', '', {
             headers: { 'Authorization': 'Token ' + localStorage.getItem('authToken') }
         })
         .then((response: AxiosResponse) => {
             const id = response.data.id as number;
-            todo.revertTodo(id);
-            loading.endLoading();
+            root.todoStore.revertTodo(id);
+            root.loadingStore.endLoading();
         })
         .catch((err: AxiosError) => {
             if(err.response !== undefined) {
                 console.log(err.response);
             }
-            loading.endLoading();
+            root.loadingStore.endLoading();
         });
     }
 
     private complete = () => {
-        const loading = this.props.loading as LoadingStore;
-        const todo = this.props.todo as TodoStore;
-        loading.startLoading();
+        const root = this.props.root as RootStore;
+        root.loadingStore.startLoading();
         axios.post('https://practice.alpaca.kr/api/todo/' + this.props.id + '/complete/', '', {
             headers: { 'Authorization': 'Token ' + localStorage.getItem('authToken') }
         })
         .then((response: AxiosResponse) => {
             const data = response.data as TodoSerializer;
-            todo.completeTodo(data.id, data.completedAt);
-            loading.endLoading();
+            root.todoStore.completeTodo(data.id, data.completedAt);
+            root.loadingStore.endLoading();
         })
         .catch((err: AxiosError) => {
             if(err.response !== undefined) {
                 console.log(err.response);
             }
-            loading.endLoading();
+            root.loadingStore.endLoading();
         });
     }
 
     private delete = () => {
-        const loading = this.props.loading as LoadingStore;
-        const todo = this.props.todo as TodoStore;
-        loading.startLoading();
+        const root = this.props.root as RootStore;
+        root.loadingStore.startLoading();
         axios.delete('https://practice.alpaca.kr/api/todo/' + this.props.id + '/', {
             headers: { 'Authorization': 'Token ' + localStorage.getItem('authToken') }
         })
         .then((response: AxiosResponse) => {
             const id = response.data.id as number;
-            todo.deleteTodo(id);
-            loading.endLoading();
+            root.todoStore.deleteTodo(id);
+            root.loadingStore.endLoading();
         })
         .catch((err: AxiosError) => {
             if(err.response !== undefined) {
                 console.log(err.response);
             }
-            loading.endLoading();
+            root.loadingStore.endLoading();
         });
     }
 
@@ -175,11 +169,11 @@ class TodoCard extends React.Component<IProps> {
     }
 
     public render() {
-        const todo = this.props.todo as TodoStore;
+        const root = this.props.root as RootStore;
         const { classes } = this.props;
 
         let myTodo = new TodoSerializer;
-        todo.todoList.forEach((item) => {
+        root.todoStore.todoList.forEach((item) => {
            if(item.id === this.props.id) {
                myTodo = item;
            }
