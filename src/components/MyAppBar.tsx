@@ -112,20 +112,14 @@ class MyAppBar extends React.Component<IProps> {
         this.openDialogAdd();
     }
     
-    private handleClickButtonAdd = () => {
+    private onSubmitAdd = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         if(this.content.length > 100) {
             this.openDialogFailed();
         } else {
             this.addTodo(this.content);
         }
         this.closeDialogAdd();
-    }
-
-    private handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-        if(event.keyCode === 13) {
-            this.addTodo(this.content);
-            this.closeDialogAdd();
-        }
     }
 
     private handleCloseDialogAdd = () => {
@@ -164,6 +158,10 @@ class MyAppBar extends React.Component<IProps> {
     private handleClickButtonSubmit = () => {
         this.closeDialogFailed();
     }
+
+    private dialogContentAddStyle = {
+        paddingTop: '0px'
+    };
 
     public render() {
         const app = this.props.app as AppStore;
@@ -205,17 +203,19 @@ class MyAppBar extends React.Component<IProps> {
                 <MuiThemeProvider theme={korTheme}>
                     <Dialog open={this.isOpenedDialogAdd} onClose={this.handleCloseDialogAdd}>
                         <DialogTitle className={classes.dialogTitle}>새 할 일 추가하기</DialogTitle>
-                        <DialogContent>
-                            <TextField autoFocus={true} margin="dense" label="내용" fullWidth={true} value={this.content} onChange={this.handleChangeContent} onKeyDown={this.handleKeyDown} />
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={this.handleClickButtonCancel} color="primary">
-                                취소
-                            </Button>
-                            <Button onClick={this.handleClickButtonAdd} color="primary">
-                                추가
-                            </Button>
-                        </DialogActions>
+                        <form onSubmit={this.onSubmitAdd}>
+                            <DialogContent style={this.dialogContentAddStyle}>
+                                <TextField autoFocus={true} margin="dense" label="내용" fullWidth={true} value={this.content} onChange={this.handleChangeContent}/>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={this.handleClickButtonCancel} color="primary">
+                                    취소
+                                </Button>
+                                <Button type="submit" color="primary">
+                                    추가
+                                </Button>
+                            </DialogActions>
+                        </form>
                     </Dialog>
                     <Dialog open={this.isOpenedDialogFailed} onClose={this.handleCloseDialogFailed}>
                         <DialogTitle className={classes.dialogTitle}>할 일 추가에 실패했습니다.</DialogTitle>

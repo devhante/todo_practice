@@ -26,6 +26,12 @@ const styles = createStyles({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    form: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
     idTextField: {
         marginBottom: '18px'
     },
@@ -73,10 +79,9 @@ class LoginCard extends React.Component<IProps> {
         }
     }
 
-    private handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-        if(event.keyCode === 13) {
-            this.login();
-        }
+    private onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        this.login();
     }
 
     private login = () => {
@@ -103,9 +108,11 @@ class LoginCard extends React.Component<IProps> {
         return (
             <div className={classes.root}>
                 <Card className={classes.card}>
-                    <TextField className={classes.idTextField} label="아이디" value={this.username} onChange={this.handleChangeUsername} onKeyDown={this.handleKeyDown} />
-                    <TextField className={classes.pwTextField} label="비밀번호" type="password" value={this.password} onChange={this.handleChangePassword} onKeyDown={this.handleKeyDown} />
-                    <Button variant="contained" color="primary" onClick={this.login} >로그인</Button>
+                    <form className={classes.form} onSubmit={this.onSubmit}>
+                        <TextField className={classes.idTextField} label="아이디" value={this.username} onChange={this.handleChangeUsername}/>
+                        <TextField className={classes.pwTextField} label="비밀번호" type="password" value={this.password} onChange={this.handleChangePassword}/>
+                        <Button type="submit" variant="contained" color="primary">로그인</Button>
+                    </form>
                 </Card>
                 {this.isLoginFailed ? (
                     <Typography className={classes.errorMessage} component="p">
