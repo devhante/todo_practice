@@ -1,5 +1,5 @@
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
 import RootStore from '../stores/root';
@@ -23,17 +23,17 @@ interface IProps extends WithStyles<typeof styles> {
 class TodoList extends React.Component<IProps> {
     constructor(props: IProps) {
         super(props);
+        const root = this.props.root as RootStore;
+        root.axiosStore.create();
         this.getTodoList();
-        console.log('constructor 호출됨');
     }
 
     private getTodoList = () => {
         const root = this.props.root as RootStore;
         root.loadingStore.startLoading();
         root.loadingStore.endLoading();
-        axios.get('https://practice.alpaca.kr/api/todo/', {
-            headers: { 'Authorization': 'Token ' + localStorage.getItem('authToken') }
-        })
+        console.log(root.axiosStore.instance);
+        root.axiosStore.instance.get('todo/')
         .then((response: AxiosResponse) => {
             root.todoStore.setTodoList(response.data);
             console.log(response.data);

@@ -11,15 +11,12 @@ import TextField from '@material-ui/core/TextField';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import { action, observable } from "mobx"
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
 import RootStore from '../stores/root';
 import { engTheme, korTheme } from '../theme';
-
-
-
 
 const styles = createStyles({
     root: {
@@ -112,7 +109,7 @@ class MyAppBar extends React.Component<IProps> {
         if(this.content.length > 100) {
             this.openDialogFailed();
         } else {
-            this.addTodo(this.content);
+            this.addTodo();
         }
         this.closeDialogAdd();
     }
@@ -125,13 +122,11 @@ class MyAppBar extends React.Component<IProps> {
         this.closeDialogAdd();
     }
 
-    private addTodo = (content: string) => {
+    private addTodo = () => {
         const root = this.props.root as RootStore;
         root.loadingStore.startLoading();
-        axios.post('https://practice.alpaca.kr/api/todo/', {
+        root.axiosStore.instance.post('todo/', {
             content: this.content
-        }, {
-            headers: { 'Authorization': 'Token ' + localStorage.getItem('authToken') },
         })
         .then((response: AxiosResponse) => {
             root.todoStore.addTodo(response.data);

@@ -8,7 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
@@ -82,9 +82,7 @@ class TodoCard extends React.Component<IProps> {
     private addLike = () => {
         const root = this.props.root as RootStore;
         root.loadingStore.startLoading();
-        axios.post('https://practice.alpaca.kr/api/todo/' + this.props.id + '/add_like/','', {
-            headers: { 'Authorization': 'Token ' + localStorage.getItem('authToken') }
-        })
+        root.axiosStore.instance.post('todo/' + this.props.id + '/add_like/')
         .then((response: AxiosResponse) => {
             const data = response.data as TodoSerializer;
             root.todoStore.setLike(data.id, data.like);
@@ -101,9 +99,7 @@ class TodoCard extends React.Component<IProps> {
     private revert = () => {
         const root = this.props.root as RootStore;
         root.loadingStore.startLoading();
-        axios.post('https://practice.alpaca.kr/api/todo/' + this.props.id + '/revert_complete/', '', {
-            headers: { 'Authorization': 'Token ' + localStorage.getItem('authToken') }
-        })
+        root.axiosStore.instance.post('todo/' + this.props.id + '/revert_complete/')
         .then((response: AxiosResponse) => {
             const id = response.data.id as number;
             root.todoStore.revertTodo(id);
@@ -120,9 +116,7 @@ class TodoCard extends React.Component<IProps> {
     private complete = () => {
         const root = this.props.root as RootStore;
         root.loadingStore.startLoading();
-        axios.post('https://practice.alpaca.kr/api/todo/' + this.props.id + '/complete/', '', {
-            headers: { 'Authorization': 'Token ' + localStorage.getItem('authToken') }
-        })
+        root.axiosStore.instance.post('todo/' + this.props.id + '/complete/')
         .then((response: AxiosResponse) => {
             const data = response.data as TodoSerializer;
             root.todoStore.completeTodo(data.id, data.completedAt);
@@ -139,9 +133,7 @@ class TodoCard extends React.Component<IProps> {
     private delete = () => {
         const root = this.props.root as RootStore;
         root.loadingStore.startLoading();
-        axios.delete('https://practice.alpaca.kr/api/todo/' + this.props.id + '/', {
-            headers: { 'Authorization': 'Token ' + localStorage.getItem('authToken') }
-        })
+        root.axiosStore.instance.delete('todo/' + this.props.id + '/')
         .then((response: AxiosResponse) => {
             const id = response.data.id as number;
             root.todoStore.deleteTodo(id);
