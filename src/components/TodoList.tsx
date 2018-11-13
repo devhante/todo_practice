@@ -32,11 +32,9 @@ class TodoList extends React.Component<IProps> {
         const root = this.props.root as RootStore;
         root.loadingStore.startLoading();
         root.loadingStore.endLoading();
-        console.log(root.axiosStore.instance);
         root.axiosStore.instance.get('todo/')
         .then((response: AxiosResponse) => {
             root.todoStore.setTodoList(response.data);
-            console.log(response.data);
             // loading.endLoading();
         })
         .catch((err: AxiosError) => {
@@ -54,7 +52,7 @@ class TodoList extends React.Component<IProps> {
         return (
             <div className={classes.root}>
                 {root.todoStore.todoList.map((item) => (
-                    root.searchStore.searchWord.trim() !== '' ? (item.content.includes(root.searchStore.searchWord.trim()) ? <TodoCard id={item.id} /> : '') : <TodoCard id={item.id} />
+                    root.searchStore.searchWord.trim() !== '' ? (item.content.includes(root.searchStore.searchWord.trim()) ? <TodoCard key={item.id} id={item.id} /> : '') : <TodoCard key={item.id} id={item.id} />
                 ))}
             </div>
         );
