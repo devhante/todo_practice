@@ -171,22 +171,25 @@ class TodoCard extends React.Component<IProps> {
            }
         });
 
-        const createdYear = Number(myTodo.createdAt.substring(0, 4));
-        const createdMonth = Number(myTodo.createdAt.substring(5, 7));
-        const createdDate = Number(myTodo.createdAt.substring(8, 10));
-        const createdAmpm = Number(myTodo.createdAt.substring(11, 13)) < 12 ? '오전' : '오후';
-        let createdHour = Number(myTodo.createdAt.substring(11, 13));
-        const createdMinute = Number(myTodo.createdAt.substring(14, 16));
-        const createdSecond = Number(myTodo.createdAt.substring(17, 19));
+        const created = new Date(myTodo.createdAt);
 
+        const createdYear = created.getFullYear();
+        const createdMonth = created.getMonth();
+        const createdDate = created.getDate();
+        const createdAmpm = created.getHours() < 12 ? '오전' : '오후';
+        let createdHour = created.getHours();
+        const createdMinute = created.getMinutes();
+        const createdSecond = created.getSeconds();
+
+        const completed = myTodo.isCompleted ? new Date(myTodo.completedAt) : null;
         
-        const completedYear = myTodo.isCompleted ? Number(myTodo.completedAt.substring(0, 4)) : null;
-        const completedMonth = myTodo.isCompleted ? Number(myTodo.completedAt.substring(5, 7)) : null;
-        const completedDate = myTodo.isCompleted ? Number(myTodo.completedAt.substring(8, 10)) : null;
-        const completedAmpm = myTodo.isCompleted ? Number(myTodo.completedAt.substring(11, 13)) < 12 ? '오전' : '오후' : null;
-        let completedHour = myTodo.isCompleted ? Number(myTodo.completedAt.substring(11, 13)) : null;
-        const completedMinute = myTodo.isCompleted ? Number(myTodo.completedAt.substring(14, 16)) : null;
-        const completedSecond = myTodo.isCompleted ? Number(myTodo.completedAt.substring(17, 19)) : null;
+        const completedYear = completed ? completed.getFullYear() : null;
+        const completedMonth = completed ? completed.getMonth() : null;
+        const completedDate = completed ? completed.getDate() : null;
+        const completedAmpm = completed ? completed.getHours() < 12 ? '오전' : '오후' : null;
+        let completedHour = completed ? completed.getHours() : null;
+        const completedMinute = completed ? completed.getMinutes() : null;
+        const completedSecond = completed ? completed.getSeconds() : null;
 
         if(createdHour > 12) {
             createdHour -= 12;
